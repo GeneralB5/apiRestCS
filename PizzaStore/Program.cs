@@ -1,4 +1,6 @@
+using System.Data.Common;
 using Microsoft.OpenApi.Models;
+using PizzaStore.Db;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
@@ -17,9 +19,9 @@ if(app.Environment.IsDevelopment()){
 }
 
 app.MapGet("/", () => "Hello World!");
-app.MapGet("/products", () => "data");
-app.MapGet("/products/{id}", (int id) =>  "id : "+id);
-app.MapPost("/product/create",( ) => {});
-app.MapPut("/product/",()=>{});
-app.MapDelete("/product/{id}",(int id)=>{});
+app.MapGet("/products", () => PizzaDB.GetPizzas());
+app.MapGet("/products/{id}", (int id) =>  PizzaDB.GetPizza(id));
+app.MapPost("/product/create",(Pizza pizza) => PizzaDB.CreatePizza(pizza));
+app.MapPut("/product/",(Pizza pizza)=> PizzaDB.UpdatePizza(pizza));
+app.MapDelete("/product/{id}",(int id)=>PizzaDB.RemovePizza(id));
 app.Run();
